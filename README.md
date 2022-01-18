@@ -1,6 +1,6 @@
 # WAR
 
-A simulation of the card game "War" with two computer players
+#### A simulation of the card game "War" with two computer players
 
 ## Rules
 
