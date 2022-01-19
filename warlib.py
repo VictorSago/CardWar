@@ -16,6 +16,7 @@ values = {
     'King': 13,
     'Ace': 14
 }
+
 ranks = tuple(values.keys())
 
 
