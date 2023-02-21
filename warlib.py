@@ -56,34 +56,78 @@ class Card:
         return self.value >= other.value
 
 
-class Deck:
+class CardCollection:
+    """
+    A class to hold a collection of cards.
+    """
+
+    def __init__(self, *cards_init):
+        self.cards = []
+        for cards in cards_init:
+            if type(cards) == type([]):
+                self.cards.extend(cards)
+            else:
+                self.cards.append(cards)
+
+    def shuffle(self):
+        random.shuffle(self.cards)
+
+    def get_last(self):
+        if len(self.cards) > 0:
+            return self.cards.pop()
+        else:
+            return None
+
+    def get_first(self):
+        if len(self.cards) > 0:
+            return self.cards.pop(0)
+        else:
+            return None
+
+    def add_cards(self, *new_cards):
+        """
+        Add new cards to the collection.
+        new_cards can either be a single Card object
+        or a list of Card objects
+        """
+        for cards in new_cards:
+            if type(cards) == type([]):
+                self.cards.extend(cards)
+            else:
+                self.cards.append(cards)
+
+    def __len__(self):
+        return len(self.cards)
+
+    def __str__(self):
+        all_strings = [str(cc) for cc in self.cards]
+        return ", ".join(all_strings)
+
+    def __getitem__(self, item):
+        return self.cards[item]
+
+    def __iter__(self):
+        return (card for card in self.cards)
+
+
+class Deck(CardCollection):
     """
     Class to hold a collection of cards
     """
 
     def __init__(self):
-        self.all_cards = []
+        # self.cards = []
+        super().__init__()
         for suit in suits:
             for rank in ranks:
-                self.all_cards.append(Card(suit, rank))
-
-    def shuffle(self):
-        random.shuffle(self.all_cards)
+                self.cards.append(Card(suit, rank))
 
     def deal_one(self):
-        if len(self.all_cards) > 0:
-            return self.all_cards.pop()
-        else:
-            return None
-
-    def __len__(self):
-        return len(self.all_cards)
+        return super().get_last()
 
     def __str__(self):
-        the_head = f"Deck with {len(self.all_cards)} cards: "
-        all_strings = [str(cc) for cc in self.all_cards]
-        the_tail = ", ".join(all_strings)
-        return the_head + the_tail
+        the_head = f"Deck with {len(self.cards)} cards: "
+        return the_head + super().__str__()
 
 
 class Player:
@@ -93,10 +137,12 @@ class Player:
 
     def __init__(self, name):
         self.name = name
-        self.card_hand = []
+        # self.card_hand = []
+        self.card_hand = CardCollection()
 
     def play_card(self):
-        return self.card_hand.pop(0)
+        # return self.card_hand.pop(0)
+        return self.card_hand.get_first()
 
     def add_cards(self, *new_cards):
         """
@@ -104,14 +150,13 @@ class Player:
         new_cards can either be a single Card object
         or a list of Card objects
         """
-        for cards in new_cards:
-            if type(cards) == type([]):
-                self.card_hand.extend(cards)
-            else:
-                self.card_hand.append(cards)
+        self.card_hand.add_cards(*new_cards)
 
     def cards_left(self):
         return len(self.card_hand)
 
     def __str__(self):
-        return f"Player {self.name} has {len(self.card_hand)} cards."
+        the_head = f"Player {self.name} has {len(self.card_hand)} cards"
+        the_middle = ": " if len(self.card_hand) > 0 else "."
+        the_tail = str(self.card_hand)
+        return the_head + the_middle + the_tail

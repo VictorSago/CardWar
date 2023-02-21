@@ -1,4 +1,4 @@
-from warlib import Deck, Player
+from warlib import CardCollection, Deck, Player
 
 # Game setup
 ADDITIONAL_CARDS = 5
@@ -33,14 +33,14 @@ while game_on:
         break
 
     # Start new round
-    player_one_cards = [player_one.play_card()]
-    player_two_cards = [player_two.play_card()]
+    player_one_cards = CardCollection(player_one.play_card())
+    player_two_cards = CardCollection(player_two.play_card())
 
     at_war = True
     while at_war:
         print(f"Player {player_one.name}: ", player_one_cards)
         print(f"Player {player_two.name}: ", player_two_cards)
-        if player_one_cards[-1] > player_two_cards[-1]:
+        if player_one_cards.cards[-1] > player_two_cards.cards[-1]:
             player_one.add_cards(player_one_cards, player_two_cards)
             at_war = False
         elif player_one_cards[-1] < player_two_cards[-1]:
@@ -58,7 +58,7 @@ while game_on:
                 break
             else:
                 for num in range(ADDITIONAL_CARDS):
-                    player_one_cards.append(player_one.play_card())
-                    player_two_cards.append(player_two.play_card())
+                    player_one_cards.cards.append(player_one.play_card())
+                    player_two_cards.cards.append(player_two.play_card())
 
     print("Goodbye!")
