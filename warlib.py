@@ -103,6 +103,9 @@ class CardCollection:
         all_strings = [str(cc) for cc in self.cards]
         return ", ".join(all_strings)
 
+    def __getitem__(self, item):
+        return self.cards[item]
+
     def __iter__(self):
         return (card for card in self.cards)
 
