@@ -64,9 +64,9 @@ class CardCollection:
     def __init__(self, *cards_init):
         self.cards = []
         for cards in cards_init:
-            if type(cards) == type([]):
+            if type(cards) is list:
                 self.cards.extend(cards)
-            else:
+            elif type(cards) is Card:
                 self.cards.append(cards)
 
     def shuffle(self):
@@ -91,9 +91,9 @@ class CardCollection:
         or a list of Card objects
         """
         for cards in new_cards:
-            if type(cards) == type([]):
+            if type(cards) is list:
                 self.cards.extend(cards)
-            else:
+            elif type(cards) is Card:
                 self.cards.append(cards)
 
     def __len__(self):
